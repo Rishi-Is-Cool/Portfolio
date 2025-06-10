@@ -53,7 +53,7 @@ A smart recipe website that gives personalized dish suggestions, search history 
 
 ---
 
-## Fun Facts
+## About Me
 
 - I love automating boring tasks with Python.  
 - I'm a fan of chess and strategy games.  
