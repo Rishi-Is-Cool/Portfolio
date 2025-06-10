@@ -49,7 +49,7 @@ A smart recipe website that gives personalized dish suggestions, search history 
 ## Let's Connect
 
 - [LinkedIn](https://www.linkedin.com/in/rishikesh-patil-486194312/)
-- 📧 Email: [your.email@example.com](mailto:rishikeshpatil0605@gmail.com)
+- Email: [your.email@example.com](mailto:rishikeshpatil0605@gmail.com)
 
 ---
 
