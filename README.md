@@ -1,7 +1,6 @@
 # Portfolio
-CDAC-assignment-2
 
-#Rishikesh Santosh Patil
+### Rishikesh Santosh Patil
 
 ## About Me
 
