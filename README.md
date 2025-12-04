@@ -4,6 +4,9 @@ A modern, responsive personal portfolio designed to showcase projects, experienc
 
 This application is built with React and Vite, utilizing a two-column sticky layout on desktop that transforms into a fully stacked, mobile-friendly design on smaller screens.
 
+### Live Demo  
+**https://rishiportfolio-psi.vercel.app/**
+
 ## Key Features
 
 * **Responsive Layout:** Full responsiveness ensured using CSS media queries, adapting from a sticky desktop sidebar to a single-column mobile view.
