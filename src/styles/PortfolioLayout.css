@@ -38,6 +38,22 @@ body {
     overflow-y: hidden; 
 }
 
+/* --- NEW PROFILE PHOTO STYLE --- */
+.profile-photo {
+    width: 150px; /* Large on desktop */
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures the image covers the area */
+    margin-bottom: 2rem;
+    display: block; /* Make it take its own line */
+    border: 3px solid var(--color-accent-primary); /* Subtle border glow */
+    transition: transform 0.3s var(--transition-smooth);
+}
+.profile-photo:hover {
+    transform: scale(1.05);
+}
+
+
 /* --- Core Layout (Static Left / Scrollable Right) --- */
 .main-container {
     display: flex;
@@ -236,6 +252,26 @@ body {
     transform: translateY(-3px) scale(1.1); 
 }
 
+/* --- RESUME LINK STYLE (Call to Action) --- */
+.resume-link {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--color-accent-primary);
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: 200;
+    letter-spacing: 0.05em;
+    transition: all 0.3s var(--transition-smooth);
+}
+
+.resume-link:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+    color: var(--color-text-primary);
+}
+
+
 /* --- Click Ripple Effect (New) --- */
 .click-ripple {
     position: fixed;
@@ -289,6 +325,9 @@ body {
     
     .left-panel header {
         text-align: center; /* Center header content */
+        display: flex; 
+        flex-direction: column;
+        align-items: center; /* Center items for the profile photo */
     }
     .left-panel h1 {
         font-size: 2rem; /* Smaller font for mobile */
@@ -302,6 +341,16 @@ body {
         font-size: 0.9rem;
     }
     
+    /* PROFILE PHOTO MOBILE */
+    .profile-photo {
+        width: 100px; /* Smaller on mobile */
+        height: 100px;
+        margin: 0 auto 1.5rem auto; /* Center it */
+    }
+    .profile-photo:hover {
+        transform: none; /* Disable hover effect on mobile */
+    }
+
     /* Navigation Menu: Hide the vertical menu on mobile */
     .nav-menu {
         display: none; 
@@ -311,13 +360,21 @@ body {
     .social-links {
         justify-content: center; /* Center social icons */
         margin-top: 1.5rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Separator */
     }
     .social-links a:hover {
         transform: none; /* Disable subtle transform on hover */
     }
 
+    /* RESUME LINK MOBILE */
+    .resume-link {
+        display: block; /* Make it a full-width block */
+        text-align: center;
+        margin: 1.5rem 0 0 0;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Separator */
+        padding-bottom: 2rem;
+    }
 
     /* Right Panel (Content) */
     .right-panel {
@@ -346,11 +403,11 @@ body {
         transform: translateY(15px); /* Smaller shift for mobile reveal */
     }
 
-    /* Footer adjustments */
+    /* Footer adjustments (FIXED) */
     .right-panel footer {
         padding-top: 1.5rem;
         padding-bottom: 1rem;
         font-size: 0.75rem;
-        text-align: center;
+        text-align: center; 
     }
 }

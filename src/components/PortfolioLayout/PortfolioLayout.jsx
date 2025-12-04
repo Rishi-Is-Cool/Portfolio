@@ -172,7 +172,7 @@ const PortfolioLayout = () => {
             }
         });
         
-        document.querySelectorAll('.card-wrapper').forEach(el => {
+        document.querySelectorAll('.card-wrapper, .resume-link').forEach(el => {
             revealObserver.observe(el);
         });
         
@@ -228,7 +228,7 @@ const PortfolioLayout = () => {
                     <Projects />
                 </section>
 
-                {/* Footer */}
+                {/* Footer (FIXED: Added style={{ display: 'block' }} to the span for better mobile rendering) */}
                 <footer className="section-reveal" style={{ 
                     color: 'var(--color-text-secondary)',
                     display: 'flex',
@@ -239,6 +239,9 @@ const PortfolioLayout = () => {
                     paddingTop: '2rem',
                     paddingBottom: '2rem'
                 }}>
+                    <span style={{ display: 'block' }}>
+                        © 2025 Rishikesh Patil | Built with React + Vite & CSS
+                    </span>
                 </footer>
             </main>
         </div>

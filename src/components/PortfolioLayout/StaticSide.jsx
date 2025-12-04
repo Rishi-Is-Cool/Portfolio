@@ -1,5 +1,6 @@
 import React from 'react'
-import { FaGithub, FaLinkedinIn, FaInstagram, FaYoutube} from 'react-icons/fa'; // Import the icons
+import { FaGithub, FaLinkedinIn, FaInstagram, FaYoutube } from 'react-icons/fa'; // Import the icons
+import profileImg from '../../assets/handsome.JPG';
 
 const StaticSide = ({ activeSection, scrollToSection }) => {
   // Define sections once for cleaner mapping
@@ -8,6 +9,12 @@ const StaticSide = ({ activeSection, scrollToSection }) => {
   return (
     <div>
       <header>
+        <img 
+          src={profileImg}
+          alt="Rishikesh Patil Profile" 
+          className="profile-photo"
+        />
+        
         <h1>Rishikesh Patil</h1>
         <h2>AIML enthusiastic and Web Developer</h2>
         <p className="intro-text">
@@ -50,6 +57,14 @@ const StaticSide = ({ activeSection, scrollToSection }) => {
           <FaYoutube />
         </a>
       </div>
+        <a
+          href="/Rishikesh_Patil_Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="resume-link magnetic-element"
+        >
+          View Resume
+        </a>
     </div>
   )
 }
