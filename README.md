@@ -23,12 +23,12 @@ This project is built using the following core technologies and libraries:
 
 | Category | Technology | Version | Source |
 | :--- | :--- | :--- | :--- |
-| **Framework** | React | `^19.0.0` | |
-| **Build Tool** | Vite | `^6.2.0` | |
-| **Styling** | CSS | `^4.1.17` | |
-| **Animation** | Framer Motion | `^12.23.25` | |
-| **Icons** | React Icons | `^5.5.0` | |
-| **Linter** | ESLint (with React Hooks/Refresh) | `^9.21.0` | |
+| **Framework** | React | `^19.0.0` |
+| **Build Tool** | Vite | `^6.2.0` |
+| **Styling** | CSS | `^4.1.17` |
+| **Animation** | Framer Motion | `^12.23.25` |
+| **Icons** | React Icons | `^5.5.0` |
+| **Linter** | ESLint (with React Hooks/Refresh) | `^9.21.0` |
 
 ## 🛠 Project Setup
 
@@ -57,23 +57,13 @@ To run the project locally, use the following commands:
 
 * **Start the development server:**
     ```bash
-    npm run dev
-    # opens http://localhost:5173/ (or similar port) with Hot Module Replacement (HMR)
+    npm intall
+    # install all the necessary packages required
     ```
 * **Build for production:**
     ```bash
-    npm run build
-    # Creates the production-ready files in the 'dist' directory.
-    ```
-* **Run ESLint:**
-    ```bash
-    npm run lint
-    # Runs the configured ESLint rules.
-    ```
-* **Preview the production build locally:**
-    ```bash
-    npm run preview
-    # Serves the contents of the 'dist' folder locally for testing.
+    npm run dev
+    # opens http://localhost:5173/ (or similar port) with Hot Module Replacement (HMR)
     ```
 
 ## Customization Guide
