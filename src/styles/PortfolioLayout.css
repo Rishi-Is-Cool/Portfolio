@@ -33,7 +33,7 @@ body {
     font-family: var(--font-primary);
     background-color: var(--color-background);
     color: var(--color-text-primary);
-    /* Ensures only the right panel scrolls */
+    /* Ensures only the right panel scrolls on DESKTOP */
     min-height: 100vh;
     overflow-y: hidden; 
 }
@@ -70,7 +70,7 @@ body {
 
 /* The fixed-left panel */
 .left-panel {
-    width: 150%; /* Adjusted width for better content balance */
+    width: 150%; /* Original design width */
     padding: 4rem 3rem 4rem 4rem; 
     display: flex;
     flex-direction: column;
@@ -191,7 +191,7 @@ body {
     color: var(--color-text-secondary);
 }
 
-/* Magnetic/Wobble Effect */
+/* Magnetic/Wobble Effect (Desktop Only) */
 .card-wrapper:hover {
     background-color: #1c2331; /* Subtle darken on hover */
     /* GLOW Effect - Use a subtle box-shadow */
@@ -252,5 +252,105 @@ body {
     to {
         transform: scale(5);
         opacity: 0;
+    }
+}
+
+/* =====================================
+   RESPONSIVENESS (Media Queries)
+   =====================================
+*/
+
+/* Mobile/Small Screen Adjustment (<= 768px) */
+@media screen and (max-width: 768px) {
+    /* Global Overrides: Allow the main body/window to scroll */
+    body {
+        overflow-y: visible; 
+        min-height: auto;
+    }
+    
+    .main-container {
+        flex-direction: column; /* Stack the left and right panels */
+        min-height: auto;
+        overflow: visible; 
+    }
+    
+    /* Remove the mouse spotlight effect on small screens */
+    .main-container::before {
+        content: none;
+    }
+
+    /* Left Panel (Header and Nav) */
+    .left-panel {
+        position: relative; /* No longer sticky, flows naturally */
+        height: auto;
+        width: 100%; 
+        padding: 2rem 1.5rem 0 1.5rem; /* Reduced padding */
+    }
+    
+    .left-panel header {
+        text-align: center; /* Center header content */
+    }
+    .left-panel h1 {
+        font-size: 2rem; /* Smaller font for mobile */
+    }
+    .left-panel h2 {
+        font-size: 1rem;
+    }
+    .intro-text {
+        max-width: 90%;
+        margin: 1rem auto; /* Center the intro text */
+        font-size: 0.9rem;
+    }
+    
+    /* Navigation Menu: Hide the vertical menu on mobile */
+    .nav-menu {
+        display: none; 
+    }
+    
+    /* Social Links */
+    .social-links {
+        justify-content: center; /* Center social icons */
+        margin-top: 1.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Separator */
+    }
+    .social-links a:hover {
+        transform: none; /* Disable subtle transform on hover */
+    }
+
+
+    /* Right Panel (Content) */
+    .right-panel {
+        height: auto; /* Remove fixed height */
+        overflow-y: visible; /* Content flows */
+        flex-grow: unset; /* Don't rely on flex-grow in column mode */
+        padding: 2rem 1.5rem 4rem 1.5rem; /* Adjusted padding, matches left panel */
+    }
+    
+    .right-panel section {
+        margin-bottom: 3rem; /* Reduced section spacing */
+    }
+    
+    .right-panel h3 {
+        font-size: 1rem; /* Smaller section title font */
+        margin-bottom: 1rem;
+    }
+
+    /* Disable Magnetic Effect on Hover for mobile/touch screens */
+    .card-wrapper:hover {
+        transform: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); 
+    }
+    
+    .section-reveal, .card-wrapper {
+        transform: translateY(15px); /* Smaller shift for mobile reveal */
+    }
+
+    /* Footer adjustments */
+    .right-panel footer {
+        padding-top: 1.5rem;
+        padding-bottom: 1rem;
+        font-size: 0.75rem;
+        text-align: center;
     }
 }

@@ -29,7 +29,6 @@ const Projects = ({ id }) => {
         title="Faculty Evaluation & Feedback System"
         description="Institutional-level mobile + web platform that digitized the entire faculty feedback process for 400+ students. Built with Flutter, Firebase Authentication, Cloud Firestore, and Python Flask backend."
         repoLink="https://github.com/shrutmpatil/V-Recruitment-Interview-Evaluation-App" 
-        liveLink="https://v-recruitment.netlify.app/" 
         />
 
       <ProjectCard
@@ -40,6 +39,10 @@ const Projects = ({ id }) => {
       />
       
       {/* ... other projects ... */}
+
+      <span>
+          © 2025 Rishikesh Patil | Built with React + Vite & CSS
+      </span>
     </section>
   )
 }

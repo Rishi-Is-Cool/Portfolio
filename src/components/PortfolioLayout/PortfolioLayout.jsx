@@ -7,6 +7,9 @@ import Experience from './Experience';
 import Projects from './Projects';
 
 const PortfolioLayout = () => {
+    // Check initial screen size for conditional effects setup
+    const isMobileInitial = window.innerWidth <= 768; 
+
     const [mousePosition, setMousePosition] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
     const [clickRipples, setClickRipples] = useState([]);
     const [activeSection, setActiveSection] = useState('about');
@@ -14,34 +17,49 @@ const PortfolioLayout = () => {
     const lastTimeRef = useRef(0);
 
     const dynamicStyles = {
-        '--cursor-x': `${mousePosition.x}px`,
-        '--cursor-y': `${mousePosition.y}px`,
+        // Disable cursor spotlight coordinates on mobile (CSS handles visibility)
+        '--cursor-x': isMobileInitial ? '50vw' : `${mousePosition.x}px`,
+        '--cursor-y': isMobileInitial ? '50vh' : `${mousePosition.y}px`,
     };
 
     // 🏆 Smooth Scroll Implementation
     const scrollToSection = useCallback((id) => {
         const targetElement = document.getElementById(id);
         const rightPanel = rightPanelRef.current;
+        const isMobile = window.innerWidth <= 768;
 
-        if (targetElement && rightPanel) {
-            // Calculate the position of the target relative to the scrollable container
-            const targetRect = targetElement.getBoundingClientRect();
-            const containerRect = rightPanel.getBoundingClientRect();
-            
-            // Calculate the new scroll position (Target top - container top + current scroll position)
-            // A slight offset (e.g., -50) can be added here if you want the section title slightly below the top edge
-            const newScrollTop = targetRect.top - containerRect.top + rightPanel.scrollTop;
+        if (targetElement) {
+            if (isMobile) {
+                // For mobile, scroll the entire window/body
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+            } else if (rightPanel) {
+                // For desktop, scroll the right panel (original logic)
+                // Calculate the position of the target relative to the scrollable container
+                const targetRect = targetElement.getBoundingClientRect();
+                const containerRect = rightPanel.getBoundingClientRect();
+                
+                // Calculate the new scroll position
+                const newScrollTop = targetRect.top - containerRect.top + rightPanel.scrollTop;
 
-            rightPanel.scrollTo({
-                top: newScrollTop,
-                behavior: 'smooth', // This creates the smooth, professional scroll
-            });
+                rightPanel.scrollTo({
+                    top: newScrollTop,
+                    behavior: 'smooth', // This creates the smooth, professional scroll
+                });
+            }
         }
     }, []);
 
 
     useEffect(() => {
+        const isMobile = window.innerWidth <= 768;
+
         const handleMouseMove = (event) => {
+            // Disable mouse/magnetic effects on mobile
+            if (isMobile) return; 
+            
             const now = Date.now();
             if (now - lastTimeRef.current < 16) return; // Throttle to ~60fps
             
@@ -77,6 +95,9 @@ const PortfolioLayout = () => {
         };
 
         const handleMouseClick = (event) => {
+             // Disable ripple effect on mobile
+            if (isMobile) return; 
+            
             const ripple = {
                 id: Date.now(),
                 x: event.clientX,
@@ -92,8 +113,16 @@ const PortfolioLayout = () => {
         
         // --- Intersection Observer Setup for Scroll Highlighting ---
         const rightPanel = rightPanelRef.current;
-        if (!rightPanel) return;
-
+        
+        // Root is the right panel on desktop, and the viewport (null) on mobile
+        const observerRoot = isMobile ? null : rightPanel;
+        const desktopRootMargin = '-35% 0px -65% 0px';
+        const mobileRootMargin = '-25% 0px -50% 0px'; // Adjusted viewport band for mobile
+        const currentRootMargin = isMobile ? mobileRootMargin : desktopRootMargin;
+        
+        // Only observe if we are on a valid root/viewport
+        if (!isMobile && !rightPanel) return;
+        
         const sectionObserver = new IntersectionObserver(
             (entries) => {
                 let highestRatioEntry = null;
@@ -111,9 +140,8 @@ const PortfolioLayout = () => {
                     setActiveSection(highestRatioEntry.target.id);
                 }
             }, {
-                root: rightPanel,
-                // Margin creates a restrictive band for observation
-                rootMargin: '-35% 0px -65% 0px', 
+                root: observerRoot, // Use the dynamically determined root
+                rootMargin: currentRootMargin, 
                 threshold: 0.01 
             }
         );
@@ -129,7 +157,7 @@ const PortfolioLayout = () => {
                 });
             },
             { 
-                root: rightPanel,
+                root: observerRoot, // Use the dynamically determined root
                 threshold: 0.1 
             }
         );
@@ -161,11 +189,14 @@ const PortfolioLayout = () => {
             revealObserver.disconnect();
         };
     }, [scrollToSection]); // Depend on scrollToSection for proper hook execution
+    
+    // Conditionally render ripples to disable on mobile
+    const ripplesToRender = isMobileInitial ? [] : clickRipples; 
 
     return (
         <div className="main-container" style={dynamicStyles}>
-            {/* Click Ripple Effects */}
-            {clickRipples.map(ripple => (
+            {/* Click Ripple Effects (Only visible on desktop) */}
+            {ripplesToRender.map(ripple => (
                 <div
                     key={ripple.id}
                     className="click-ripple"
@@ -208,9 +239,6 @@ const PortfolioLayout = () => {
                     paddingTop: '2rem',
                     paddingBottom: '2rem'
                 }}>
-                    <span>
-                        © 2025 Rishikesh Patil | Built with React + Vite & CSS
-                    </span>
                 </footer>
             </main>
         </div>
