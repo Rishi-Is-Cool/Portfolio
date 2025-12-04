@@ -33,9 +33,9 @@ body {
     font-family: var(--font-primary);
     background-color: var(--color-background);
     color: var(--color-text-primary);
-    /* Changed from overflow-y: hidden to auto for the main body for fallback, but the right-panel controls scroll */
+    /* Ensures only the right panel scrolls */
     min-height: 100vh;
-    overflow-y: hidden;
+    overflow-y: hidden; 
 }
 
 /* --- Core Layout (Static Left / Scrollable Right) --- */
@@ -46,7 +46,6 @@ body {
     position: relative;
     overflow: hidden;
     
-    /* The main background is now controlled by the ::before pseudo-element */
     background-color: var(--color-background);
 }
 
@@ -66,21 +65,20 @@ body {
     );
     opacity: 1;
     transition: background 0.1s linear;
-    z-index: 0; /* Keep it below content */
+    z-index: 0; 
 }
 
 /* The fixed-left panel */
 .left-panel {
-    width: 150%; 
+    width: 150%; /* Adjusted width for better content balance */
     padding: 4rem 3rem 4rem 4rem; 
     display: flex;
     flex-direction: column;
     justify-content: space-between; 
-    /* The content is 100vh, but it doesn't scroll with the right side */
     height: 100vh; 
     position: sticky;
     top: 0;
-    z-index: 1; /* Ensure left panel is above background effect */
+    z-index: 1; 
 }
 
 /* The scrollable-right panel */
@@ -89,7 +87,7 @@ body {
     height: 100vh; 
     overflow-y: auto; 
     padding: 4rem; 
-    z-index: 1; /* Ensure right panel is above background effect */
+    z-index: 1; 
 }
 
 /* --- Navigation Highlighting --- */
@@ -97,6 +95,11 @@ body {
     list-style: none;
     padding: 0;
     margin-top: 5rem;
+}
+
+.nav-menu li {
+    padding: 0.1rem 0;
+    position: relative; 
 }
 
 .nav-menu a {
@@ -107,50 +110,32 @@ body {
     padding: 0.5rem 0;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    font-size: 1rem; /* Base font size */
-    transition: color 0.3s ease, 
-    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
-    font-size 0.3s ease;
+    font-size: 1rem; 
+    /* Consolidated transition for smooth effects */
+    transition: all 0.3s var(--transition-smooth);
+    
+    /* Initial state for active shift */
+    transform: translateX(0); 
 }
 
-.nav-menu li {
-    padding: 0.1rem 0;
-    position: relative; /* Needed for the ::before marker */
-}
 
-/* Active State */
+/* Active State (Scroll/Click Triggered) */
 .nav-menu .active a {
-    color: var(--color-text-primary); /* Use primary color for high visibility */
-    font-size: 1.15rem; /* Make the font slightly bigger */
+    color: var(--color-text-primary); 
+    font-size: 1.15rem; 
     transform: translateX(10px); /* Shift it to the right */
 }
 
-.nav-menu .active::before {
-    content: '';
-    width: 25px;
-    height: 1px;
-    background-color: var(--color-accent-primary);
-    margin-right: 15px;
-    transition: all 0.3s var(--transition-smooth);
-}
-.nav-menu a:not(.active)::before {
-    content: '';
-    position: absolute;
-    left: -25px; /* Adjust position relative to the left edge of the li */
-    top: 50%;
-    transform: translateY(-50%);
-    width: 25px; /* Length of the line */
-    height: 2px; /* Thicker line */
-    background-color: var(--color-accent); /* Vibrant blue accent */
-    
-    /* 🚀 Animation for the line itself */
-    transition: width 0.3s ease, background-color 0.3s ease;
-}
-
+/* Hover effect for all links */
 .nav-menu a:hover {
-    color: var(--color-accent);
+    color: var(--color-accent-primary);
     transform: translateX(5px);
 }
+/* Hover effect for line marker */
+.nav-menu li:hover::before {
+     background-color: var(--color-accent-primary);
+}
+
 
 /* --- Content Styles --- */
 .right-panel section {
@@ -175,8 +160,8 @@ body {
 /* Initial hidden state for sections and cards */
 .section-reveal, .card-wrapper {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s var(--transition-smooth), transform 0.6s var(--transition-smooth);
+    transform: translateY(30px); /* Bigger shift for dramatic effect */
+    transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
 }
 
 /* Visible state (when intersected) */
@@ -199,31 +184,28 @@ body {
     text-decoration: none;
     transition: all 0.5s var(--transition-smooth);
     
-    /* Enable 3D transformations for the wobble effect */
     perspective: 1000px; 
     transform-style: preserve-3d;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
     
-    /* Ensure internal links inherit text color */
     color: var(--color-text-secondary);
 }
 
+/* Magnetic/Wobble Effect */
 .card-wrapper:hover {
     background-color: #1c2331; /* Subtle darken on hover */
     /* GLOW Effect - Use a subtle box-shadow */
     box-shadow: 
         0 0 5px rgba(100, 255, 218, 0.4), /* Neon green inner glow */
         0 10px 30px rgba(0, 0, 0, 0.6);   /* Deeper shadow */
-}
 
-/* Water Wobble Effect (The new professional animation) */
-.card-wrapper:hover {
-    /* Subtle 3D rotation based on magnetic effect from JS */
+    /* Magnetic/Wobble transformation from JS variables */
     transform: 
         translateY(-8px) 
-        rotateX(calc(var(--magnetic-y) * -3deg)) 
-        rotateY(calc(var(--magnetic-x) * 3deg));
+        translateX(calc(var(--magnetic-x) * 15px))
+        translateY(calc(var(--magnetic-y) * 15px)); 
 }
+
 
 .card-wrapper h4 {
     color: var(--color-text-primary);
@@ -238,20 +220,20 @@ body {
 /* --- Utility Classes (Social Icons) --- */
 .social-links {
     display: flex;
-    gap: 1.5rem; /* Space between icons */
-    margin-top: 3rem; /* Space from the navigation menu */
+    gap: 1.5rem; 
+    margin-top: 3rem; 
 }
 
 .social-links a {
     color: var(--color-text-secondary);
-    font-size: 1.5rem; /* Size of the icons */
+    font-size: 1.5rem; 
     
     transition: color 0.3s ease, transform 0.3s ease-out;
 }
 
 .social-links a:hover {
-    color: var(--color-accent);
-    transform: translateY(-3px) scale(1.1); /* Lift and enlarge slightly */
+    color: var(--color-accent-primary);
+    transform: translateY(-3px) scale(1.1); 
 }
 
 /* --- Click Ripple Effect (New) --- */

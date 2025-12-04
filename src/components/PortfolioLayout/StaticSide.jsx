@@ -1,7 +1,10 @@
 import React from 'react'
+import { FaGithub, FaLinkedinIn, FaInstagram, FaYoutube} from 'react-icons/fa'; // Import the icons
 
+const StaticSide = ({ activeSection, scrollToSection }) => {
+  // Define sections once for cleaner mapping
+  const sections = ['about', 'experience', 'projects'];
 
-const StaticSide = ({ activeSection }) => {
   return (
     <div>
       <header>
@@ -15,43 +18,36 @@ const StaticSide = ({ activeSection }) => {
       {/* Navigation Menu */}
       <nav className="nav-menu">
         <ul>
-          <li>
-            <a
-              href="#about"
-              className={activeSection === 'about' ? 'active' : ''}
-            >
-              ABOUT
-            </a>
-          </li>
-          <li>
-            <a
-              href="#experience"
-              className={activeSection === 'experience' ? 'active' : ''}
-            >
-              EXPERIENCE
-            </a>
-          </li>
-          <li>
-            <a
-              href="#projects"
-              className={activeSection === 'projects' ? 'active' : ''}
-            >
-              PROJECTS
-            </a>
-          </li>
+          {sections.map((id) => (
+            <li key={id} className={activeSection === id ? 'active' : ''}>
+              <a
+                href={`#${id}`}
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent default hash jump
+                  scrollToSection(id); // Trigger smooth scroll function
+                }}
+              >
+                {id.toUpperCase()}
+              </a>
+            </li>
+          ))}
         </ul>
       </nav>
 
-      {/* Social Links (placed at the bottom via flexbox in CSS) */}
-      <div class="social-links">
-        <a href="YOUR_GITHUB_URL" target="_blank" aria-label="GitHub Profile">
-          <i class="fab fa-github"></i>
+      {/* Social Links (Now using React Icons) */}
+      <div className="social-links">
+        {/* Replace YOUR_..._URL with your actual profile links */}
+        <a href="https://github.com/Rishi-Is-Cool" target="_blank" aria-label="GitHub Profile">
+          <FaGithub />
         </a>
-        <a href="YOUR_LINKEDIN_URL" target="_blank" aria-label="LinkedIn Profile">
-          <i class="fab fa-linkedin-in"></i>
+        <a href="https://www.linkedin.com/in/rishikesh-patil-486194312/" target="_blank" aria-label="LinkedIn Profile">
+          <FaLinkedinIn />
         </a>
-        <a href="YOUR_TWITTER_URL" target="_blank" aria-label="Twitter Profile">
-          <i class="fab fa-twitter"></i>
+        <a href="https://www.instagram.com/r1shi_6?igsh=MXdpN2I5djYwanAzaA%3D%3D&utm_source=qr" target="_blank" aria-label="Instagram Profile">
+          <FaInstagram />
+        </a>
+        <a href="https://youtube.com/@rishikeshpatil-v9x?si=MFuV1_KF7CaAYFOQ" target="_blank" aria-label="Youtube Profile">
+          <FaYoutube />
         </a>
       </div>
     </div>
@@ -59,3 +55,4 @@ const StaticSide = ({ activeSection }) => {
 }
 
 export default StaticSide
+

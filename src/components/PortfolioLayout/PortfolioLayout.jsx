@@ -1,5 +1,5 @@
 // src/components/PortfolioLayout/PortfolioLayout.jsx
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import '../../styles/PortfolioLayout.css';
 import StaticSide from './StaticSide';
 import About from './About';
@@ -7,18 +7,38 @@ import Experience from './Experience';
 import Projects from './Projects';
 
 const PortfolioLayout = () => {
-    // Initial state set for component mounting (not critical for mouse tracking)
     const [mousePosition, setMousePosition] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
     const [clickRipples, setClickRipples] = useState([]);
     const [activeSection, setActiveSection] = useState('about');
     const rightPanelRef = useRef(null); 
     const lastTimeRef = useRef(0);
 
-    // Dynamic styles object derived from state for the main container
     const dynamicStyles = {
         '--cursor-x': `${mousePosition.x}px`,
         '--cursor-y': `${mousePosition.y}px`,
     };
+
+    // 🏆 Smooth Scroll Implementation
+    const scrollToSection = useCallback((id) => {
+        const targetElement = document.getElementById(id);
+        const rightPanel = rightPanelRef.current;
+
+        if (targetElement && rightPanel) {
+            // Calculate the position of the target relative to the scrollable container
+            const targetRect = targetElement.getBoundingClientRect();
+            const containerRect = rightPanel.getBoundingClientRect();
+            
+            // Calculate the new scroll position (Target top - container top + current scroll position)
+            // A slight offset (e.g., -50) can be added here if you want the section title slightly below the top edge
+            const newScrollTop = targetRect.top - containerRect.top + rightPanel.scrollTop;
+
+            rightPanel.scrollTo({
+                top: newScrollTop,
+                behavior: 'smooth', // This creates the smooth, professional scroll
+            });
+        }
+    }, []);
+
 
     useEffect(() => {
         const handleMouseMove = (event) => {
@@ -30,12 +50,7 @@ const PortfolioLayout = () => {
             const x = event.clientX;
             const y = event.clientY;
 
-            // 1. Update React state for local component use (magnetic effect, dynamic styles)
             setMousePosition({ x, y });
-
-            // ⚠️ NOTE: We are removing this line and using React's style prop instead
-            // document.documentElement.style.setProperty('--cursor-x', `${x}px`);
-            // document.documentElement.style.setProperty('--cursor-y', `${y}px`);
 
             // Magnetic effect logic for hover (Wobble)
             const magneticElements = document.querySelectorAll('.magnetic-element');
@@ -75,36 +90,35 @@ const PortfolioLayout = () => {
             }, 600);
         };
         
-        // --- Intersection Observer Setup for Scroll Highlighting and Reveal ---
+        // --- Intersection Observer Setup for Scroll Highlighting ---
         const rightPanel = rightPanelRef.current;
         if (!rightPanel) return;
 
         const sectionObserver = new IntersectionObserver(
             (entries) => {
-                // Determine the highest visible section
-                let newActiveSection = null;
+                let highestRatioEntry = null;
+                
+                // Find the entry with the highest intersection ratio within the viewport band
                 entries.forEach(entry => {
-                    // Check if the section is intersecting and is near the top of the viewport
-                    if (entry.isIntersecting && entry.boundingClientRect.top <= window.innerHeight * 0.35) {
-                        // This logic prioritizes the section closest to the top margin
-                        if (!newActiveSection || entry.boundingClientRect.top > document.getElementById(newActiveSection)?.getBoundingClientRect().top) {
-                             newActiveSection = entry.target.id;
-                        }
+                    if (entry.isIntersecting) {
+                         if (!highestRatioEntry || entry.intersectionRatio > highestRatioEntry.intersectionRatio) {
+                             highestRatioEntry = entry;
+                         }
                     }
                 });
                 
-                if (newActiveSection) {
-                    setActiveSection(newActiveSection);
+                if (highestRatioEntry) {
+                    setActiveSection(highestRatioEntry.target.id);
                 }
             }, {
-                // IMPORTANT FIX: Root must be the scrollable element
                 root: rightPanel,
-                // Margin controls when the state changes
-                rootMargin: '-35% 0px -65% 0px', // Center band for intersection
-                threshold: 0.01 // Minimal threshold to trigger observation
+                // Margin creates a restrictive band for observation
+                rootMargin: '-35% 0px -65% 0px', 
+                threshold: 0.01 
             }
         );
 
+        // --- Scroll Reveal Observer Setup ---
         const revealObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
@@ -115,7 +129,7 @@ const PortfolioLayout = () => {
                 });
             },
             { 
-                root: rightPanel, // Ensure reveal is based on right panel scroll
+                root: rightPanel,
                 threshold: 0.1 
             }
         );
@@ -146,12 +160,11 @@ const PortfolioLayout = () => {
             sectionObserver.disconnect();
             revealObserver.disconnect();
         };
-    }, []); 
+    }, [scrollToSection]); // Depend on scrollToSection for proper hook execution
 
     return (
-        // 2. Apply dynamicStyles to the main-container for the radial gradient
         <div className="main-container" style={dynamicStyles}>
-            {/* Click Ripple Effects (Placed here to be over everything) */}
+            {/* Click Ripple Effects */}
             {clickRipples.map(ripple => (
                 <div
                     key={ripple.id}
@@ -165,9 +178,9 @@ const PortfolioLayout = () => {
                 />
             ))}
             
-            {/* LEFT STATIC PANEL */}
+            {/* LEFT STATIC PANEL - Passing scrollToSection prop */}
             <aside className="left-panel">
-                <StaticSide activeSection={activeSection} />
+                <StaticSide activeSection={activeSection} scrollToSection={scrollToSection} />
             </aside>
 
             {/* RIGHT SCROLLABLE PANEL */}

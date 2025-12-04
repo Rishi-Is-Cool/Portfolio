@@ -30,7 +30,7 @@ const Experience = ({ id }) => {
       />
         <ExperienceCard 
         time="Jun 2025"
-        title="A Credit Transfer Course ( Cloud Computing) – C-DAC ACTS, Mumbai"
+        title="Credit Transfer Course ( Cloud Computing) – C-DAC ACTS, Mumbai"
         link="https://ieee.vit.edu.in"
         details={[
           "Completed 50 hours of intensive training in Cloud Architecture, AWS/Azure services, Docker, Kubernetes, CI/CD, and Microservices",
@@ -48,7 +48,7 @@ const Experience = ({ id }) => {
       />
         <ExperienceCard 
         time="Aug 2024 — Aug 2025"
-        title="Core Committee Member – Electronics & Computer Science Students Association (ECSA), VIT"
+        title="Core Committee Member – Electronics & Computer Science Students Association (ECSA)"
         details={[
           "Organized department-level technical events, seminars, and guest lectures for 300+ ECS students",
           "Handled event logistics, sponsorship outreach, and technical session coordination."

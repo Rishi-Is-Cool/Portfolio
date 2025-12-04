@@ -28,15 +28,15 @@ const Projects = ({ id }) => {
       <ProjectCard
         title="Faculty Evaluation & Feedback System"
         description="Institutional-level mobile + web platform that digitized the entire faculty feedback process for 400+ students. Built with Flutter, Firebase Authentication, Cloud Firestore, and Python Flask backend."
-        repoLink="https://github.com/YourRepoLink/Faculty-Eval" // **Update with actual GitHub link**
-        liveLink={null} 
-      />
+        repoLink="https://github.com/shrutmpatil/V-Recruitment-Interview-Evaluation-App" 
+        liveLink="https://v-recruitment.netlify.app/" 
+        />
 
       <ProjectCard
         title="RecipeWeb"
         description="A modern recipe discovery platform with user authentication, advanced search, favoriting, and responsive design. Features clean architecture, PostgreSQL backend with proper indexing, and a sleek UI built with Tailwind CSS."
-        repoLink="https://github.com/YourRepoLink/RecipeWeb" // **Update with actual GitHub link**
-        liveLink="https://recipweb-live.com" // **Update with actual live link**
+        repoLink="https://github.com/Rishi-Is-Cool/RecipeWeb" 
+        liveLink={null}
       />
       
       {/* ... other projects ... */}
