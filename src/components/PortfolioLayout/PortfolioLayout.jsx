@@ -7,12 +7,18 @@ import Experience from './Experience';
 import Projects from './Projects';
 
 const PortfolioLayout = () => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [isHovering, setIsHovering] = useState(false);
+    // Initial state set for component mounting (not critical for mouse tracking)
+    const [mousePosition, setMousePosition] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
     const [clickRipples, setClickRipples] = useState([]);
     const [activeSection, setActiveSection] = useState('about');
-    const rightPanelRef = useRef(null); // Ref to correctly target the scroll container
+    const rightPanelRef = useRef(null); 
     const lastTimeRef = useRef(0);
+
+    // Dynamic styles object derived from state for the main container
+    const dynamicStyles = {
+        '--cursor-x': `${mousePosition.x}px`,
+        '--cursor-y': `${mousePosition.y}px`,
+    };
 
     useEffect(() => {
         const handleMouseMove = (event) => {
@@ -24,23 +30,20 @@ const PortfolioLayout = () => {
             const x = event.clientX;
             const y = event.clientY;
 
+            // 1. Update React state for local component use (magnetic effect, dynamic styles)
             setMousePosition({ x, y });
 
-            // Update CSS variables for global effects
-            document.documentElement.style.setProperty('--cursor-x', `${x}px`);
-            document.documentElement.style.setProperty('--cursor-y', `${y}px`);
+            // ⚠️ NOTE: We are removing this line and using React's style prop instead
+            // document.documentElement.style.setProperty('--cursor-x', `${x}px`);
+            // document.documentElement.style.setProperty('--cursor-y', `${y}px`);
 
             // Magnetic effect logic for hover (Wobble)
             const magneticElements = document.querySelectorAll('.magnetic-element');
             
-            // Check if any magnetic element is currently hovered
-            let foundHovered = false;
             magneticElements.forEach(hoveredElement => {
                 const rect = hoveredElement.getBoundingClientRect();
                 
-                // Simplified check: is the mouse close to the element?
                 if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
-                    foundHovered = true;
                     const elementCenterX = rect.left + rect.width / 2;
                     const elementCenterY = rect.top + rect.height / 2;
                     const magneticX = (x - elementCenterX) / (rect.width * 2);
@@ -52,13 +55,10 @@ const PortfolioLayout = () => {
                     hoveredElement.style.setProperty('--magnetic-x', clampedX);
                     hoveredElement.style.setProperty('--magnetic-y', clampedY);
                 } else {
-                    // Reset magnetic variables when not hovered
                     hoveredElement.style.setProperty('--magnetic-x', 0);
                     hoveredElement.style.setProperty('--magnetic-y', 0);
                 }
             });
-
-            setIsHovering(foundHovered);
         };
 
         const handleMouseClick = (event) => {
@@ -75,28 +75,36 @@ const PortfolioLayout = () => {
             }, 600);
         };
         
-        // --- Intersection Observer Setup for Scroll Highlighting ---
+        // --- Intersection Observer Setup for Scroll Highlighting and Reveal ---
         const rightPanel = rightPanelRef.current;
         if (!rightPanel) return;
 
         const sectionObserver = new IntersectionObserver(
             (entries) => {
+                // Determine the highest visible section
+                let newActiveSection = null;
                 entries.forEach(entry => {
-                    // Check if the section is intersecting AND is moving up past the threshold
-                    if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
-                        setActiveSection(entry.target.id);
+                    // Check if the section is intersecting and is near the top of the viewport
+                    if (entry.isIntersecting && entry.boundingClientRect.top <= window.innerHeight * 0.35) {
+                        // This logic prioritizes the section closest to the top margin
+                        if (!newActiveSection || entry.boundingClientRect.top > document.getElementById(newActiveSection)?.getBoundingClientRect().top) {
+                             newActiveSection = entry.target.id;
+                        }
                     }
                 });
+                
+                if (newActiveSection) {
+                    setActiveSection(newActiveSection);
+                }
             }, {
                 // IMPORTANT FIX: Root must be the scrollable element
                 root: rightPanel,
-                // Margin controls when the state changes (e.g., when the section reaches the top 30% of the viewport)
-                rootMargin: '-30% 0px -70% 0px', 
-                threshold: 0.1
+                // Margin controls when the state changes
+                rootMargin: '-35% 0px -65% 0px', // Center band for intersection
+                threshold: 0.01 // Minimal threshold to trigger observation
             }
         );
 
-        // --- Scroll Reveal Observer Setup ---
         const revealObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
@@ -106,7 +114,10 @@ const PortfolioLayout = () => {
                     }
                 });
             },
-            { threshold: 0.1 }
+            { 
+                root: rightPanel, // Ensure reveal is based on right panel scroll
+                threshold: 0.1 
+            }
         );
 
 
@@ -115,12 +126,10 @@ const PortfolioLayout = () => {
             const section = document.getElementById(id);
             if (section) {
                 sectionObserver.observe(section);
-                // Also observe each section for the fade-in reveal
                 revealObserver.observe(section); 
             }
         });
         
-        // Observe individual cards/elements for reveal animation
         document.querySelectorAll('.card-wrapper').forEach(el => {
             revealObserver.observe(el);
         });
@@ -137,10 +146,11 @@ const PortfolioLayout = () => {
             sectionObserver.disconnect();
             revealObserver.disconnect();
         };
-    }, []); // Empty dependency array ensures it runs once on mount
+    }, []); 
 
     return (
-        <div className="main-container">
+        // 2. Apply dynamicStyles to the main-container for the radial gradient
+        <div className="main-container" style={dynamicStyles}>
             {/* Click Ripple Effects (Placed here to be over everything) */}
             {clickRipples.map(ripple => (
                 <div

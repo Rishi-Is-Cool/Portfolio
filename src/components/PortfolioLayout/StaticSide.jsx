@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const StaticSide = ({ activeSection }) => {
   return (
     <div>
@@ -10,42 +11,48 @@ const StaticSide = ({ activeSection }) => {
           I build accessible, pixel-perfect digital experiences for the web.
         </p>
       </header>
-      
+
       {/* Navigation Menu */}
       <nav className="nav-menu">
-      <ul>
-        <li>
-          <a 
-            href="#about" 
-            className={activeSection === 'about' ? 'active' : ''}
-          >
-            ABOUT
-          </a>
-        </li>
-        <li>
-          <a 
-            href="#experience" 
-            className={activeSection === 'experience' ? 'active' : ''}
-          >
-            EXPERIENCE
-          </a>
-        </li>
-        <li>
-          <a 
-            href="#projects" 
-            className={activeSection === 'projects' ? 'active' : ''}
-          >
-            PROJECTS
-          </a>
-        </li>
-      </ul>
-    </nav>
+        <ul>
+          <li>
+            <a
+              href="#about"
+              className={activeSection === 'about' ? 'active' : ''}
+            >
+              ABOUT
+            </a>
+          </li>
+          <li>
+            <a
+              href="#experience"
+              className={activeSection === 'experience' ? 'active' : ''}
+            >
+              EXPERIENCE
+            </a>
+          </li>
+          <li>
+            <a
+              href="#projects"
+              className={activeSection === 'projects' ? 'active' : ''}
+            >
+              PROJECTS
+            </a>
+          </li>
+        </ul>
+      </nav>
 
       {/* Social Links (placed at the bottom via flexbox in CSS) */}
-      <div className="social-links">
-        {/* Replace with actual icon components (e.g., from react-icons) */}
-        <a href="https://github.com/..." target="_blank" rel="noopener noreferrer">GitHub</a> | 
-        <a href="https://linkedin.com/..." target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <div class="social-links">
+        <a href="YOUR_GITHUB_URL" target="_blank" aria-label="GitHub Profile">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="YOUR_LINKEDIN_URL" target="_blank" aria-label="LinkedIn Profile">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="YOUR_TWITTER_URL" target="_blank" aria-label="Twitter Profile">
+          <i class="fab fa-twitter"></i>
+        </a>
       </div>
     </div>
   )
