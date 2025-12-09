@@ -35,6 +35,7 @@ body {
     color: var(--color-text-primary);
     /* Ensures only the right panel scrolls on DESKTOP */
     min-height: 100vh;
+    text-align: justify;
     overflow-y: hidden; 
 }
 
@@ -86,7 +87,7 @@ body {
 
 /* The fixed-left panel */
 .left-panel {
-    width: 150%; /* Original design width */
+    width: 120%; /* Original design width */
     padding: 4rem 3rem 4rem 4rem; 
     display: flex;
     flex-direction: column;
@@ -199,6 +200,7 @@ body {
     cursor: pointer;
     text-decoration: none;
     transition: all 0.5s var(--transition-smooth);
+    
     
     perspective: 1000px; 
     transform-style: preserve-3d;

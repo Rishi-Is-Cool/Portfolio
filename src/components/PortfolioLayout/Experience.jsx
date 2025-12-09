@@ -23,7 +23,7 @@ const Experience = ({ id }) => {
         title="Technical Head – TechWeb, IEEE-VIT Student Branch"
         link="https://ieee.vit.edu.in"
         details={[
-          "Lead a team of 6+ developers to maintain and enhance the official IEEE-VIT website.",
+          "Leading a team of 6+ developers to maintain and enhance the official IEEE-VIT website.",
           "Currently driving a complete website overhaul – modernizing UI/UX, improving performance, and implementing new features with React, Tailwind CSS, and Node.js backend.",
           "Manage deployment pipeline, domain handling, and coordination with college administration and IEEE Mumbai Section."
         ]}
@@ -31,7 +31,7 @@ const Experience = ({ id }) => {
         <ExperienceCard 
         time="Jun 2025"
         title="Credit Transfer Course ( Cloud Computing) – C-DAC ACTS, Mumbai"
-        link="https://ieee.vit.edu.in"
+        link="/Rishikesh_Patil_CDAC_Certificate.pdf"
         details={[
           "Completed 50 hours of intensive training in Cloud Architecture, AWS/Azure services, Docker, Kubernetes, CI/CD, and Microservices",
           "Built and deployed full-stack cloud-native applications as part of the credited curriculum"

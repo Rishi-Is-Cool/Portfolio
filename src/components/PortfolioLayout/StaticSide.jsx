@@ -18,7 +18,7 @@ const StaticSide = ({ activeSection, scrollToSection }) => {
         <h1>Rishikesh Patil</h1>
         <h2>AIML enthusiastic and Web Developer</h2>
         <p className="intro-text">
-          I build accessible, pixel-perfect digital experiences for the web.
+          I am a frontend developer learning AIML, aiming to create useful and innovative solutions.
         </p>
       </header>
 

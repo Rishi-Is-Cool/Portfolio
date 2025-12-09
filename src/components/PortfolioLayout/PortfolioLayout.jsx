@@ -22,7 +22,7 @@ const PortfolioLayout = () => {
         '--cursor-y': isMobileInitial ? '50vh' : `${mousePosition.y}px`,
     };
 
-    // 🏆 Smooth Scroll Implementation
+    //  Smooth Scroll Implementation
     const scrollToSection = useCallback((id) => {
         const targetElement = document.getElementById(id);
         const rightPanel = rightPanelRef.current;
