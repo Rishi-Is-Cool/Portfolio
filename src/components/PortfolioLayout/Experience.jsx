@@ -19,6 +19,15 @@ const Experience = ({ id }) => {
         <h3>EXPERIENCE</h3>
 
         <ExperienceCard 
+        time="Dec 2025 — Jan 2026"
+        title="Software Development Intern - Tata Consulting Engineers Limited (TCE)"
+        link="/Rishikesh_Patil_TCE_Internship_Completion_Letter.pdf"
+        details={[
+          "Designed and developed a full stack “SmartCafe” (Cafe Management System) web application using React, SQL, and PostgreSQL, implementing real world business workflows including inventory tracking, order processing, and analytics dashboards.",
+          "Gained hands on exposure to enterprise architecture (MVC, layered design, business logic separation) and industry standard development practices followed by large scale MNCs."
+        ]}
+      />
+        <ExperienceCard 
         time="Sep 2025 — Present"
         title="Technical Head – TechWeb, IEEE-VIT Student Branch"
         link="https://ieee.vit.edu.in"
