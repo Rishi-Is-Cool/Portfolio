@@ -1,93 +1,101 @@
-# Rishikesh Patil's Portfolio
+# Rishikesh Patil — Applied AI / GenAI Engineer
 
-A modern, responsive personal portfolio designed to showcase projects, experience, and skills with a clean, dark aesthetic and interactive features.
+Portfolio site: systems, research and experience, with a retrieval-grounded
+assistant that answers questions about the work using only what the site
+publishes.
 
-This application is built with React and Vite, utilizing a two-column sticky layout on desktop that transforms into a fully stacked, mobile-friendly design on smaller screens.
+**Live:** https://rishikesh-portfolio-2025.vercel.app/
 
-### Live Demo  
-**https://rishikesh-portfolio-2025.vercel.app/**
+## Stack
 
-## Key Features
+| Area | Choice |
+| :--- | :--- |
+| Framework | Next.js 15 (App Router, Server Components by default) |
+| Language | TypeScript (strict) |
+| Styling | Tailwind CSS v4 — two colours: a green shade and a black shade |
+| Motion | CSS transitions + IntersectionObserver (no animation library) |
+| Portrait | Canvas 2D — edge-derived point cloud, click to resolve into the photo |
+| Assistant | Groq (primary) → Gemini (fallback), plain REST, behind `/api/ask` |
+| Hosting | Vercel |
 
-* **Responsive Layout:** Full responsiveness ensured using CSS media queries, adapting from a sticky desktop sidebar to a single-column mobile view.
-* **Dark Theme & Aesthetic:** A sleek, minimal dark theme utilizing a dark blue background (`#0d1117`) and neon cyan (`#64ffda`) as the primary accent color.
-* **Smooth Navigation:** Custom smooth scrolling to sections (`About`, `Experience`, `Projects`) implemented via JavaScript (using `scrollTo` in `PortfolioLayout.jsx`).
-* **Scroll Highlighting:** Dynamic navigation menu highlighting the active section based on scroll position using the `IntersectionObserver` API.
-* **Interactive Effects (Desktop):**
-    * **Mouse Spotlight:** A subtle radial gradient follows the mouse cursor on the background.
-    * **Magnetic Cards:** Experience and project cards exhibit a slight "magnetic" wobble effect on hover.
-    * **Click Ripples:** A visual ripple effect appears on mouse clicks.
-* **Scroll Reveal Animation:** Sections and cards fade in and slide up gracefully as they enter the viewport.
-* **Profile Integration:** Dedicated space for a circular profile photo and a direct link to the resume PDF.
+## Structure
 
-## Technology Stack
+```
+app/
+  page.tsx                  Home — composes every section
+  layout.tsx                Metadata, fonts, JSON-LD, analytics
+  globals.css               Design tokens and base styles
+  api/ask/route.ts          Assistant: validation, rate limit, retrieval, model
 
-This project is built using the following core technologies and libraries:
+  systems/[slug]/page.tsx   Case studies (FinGuard, ACE-SER)
+  opengraph-image.tsx       Generated OG card
+  sitemap.ts, robots.ts     SEO
+components/                 Section and UI components
+lib/
+  content.ts                Single source of truth for every published fact
+  knowledge.ts              Retrieval corpus + BM25 scoring, derived from content
+  llm.ts                    Groq → Gemini provider chain, fails over silently
+  github.ts                 Cached GitHub fetch, fails soft
+public/                     Resume, certificates, portrait source
+```
 
-| Category | Technology | Version | Source |
-| :--- | :--- | :--- | :--- |
-| **Framework** | React | `^19.0.0` |
-| **Build Tool** | Vite | `^6.2.0` |
-| **Styling** | CSS | `^4.1.17` |
-| **Animation** | Framer Motion | `^12.23.25` |
-| **Icons** | React Icons | `^5.5.0` |
-| **Linter** | ESLint (with React Hooks/Refresh) | `^9.21.0` |
+### Editing content
 
-## 🛠 Project Setup
+Everything the site states lives in [`lib/content.ts`](lib/content.ts) — profile,
+proof strip, systems, research, experience, stack, credentials. Change it there
+and the page, the case studies and the assistant's knowledge all follow.
 
-### Prerequisites
+Each entry must be traceable to a verified source (the resume in `public/`, a
+public repository, or a document shipped in `public/`). No estimated numbers, no
+inferred project links.
 
-You need to have Node.js (version 18 or later) installed.
+### Swapping the portrait
 
-### Installation
+Replace `public/portrait.jpg` and, if the framing differs, adjust `CROP` at the
+top of [`components/Portrait.tsx`](components/Portrait.tsx). Nothing else in the
+component is specific to the image.
 
-1.  **Clone the repository (or navigate to your project directory):**
-    ```bash
-    git clone [your-repo-url]
-    cd portfolio
-    ```
+## Local development
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
+```bash
+npm install
+npm run dev
+```
 
-### Development Scripts
+Then open http://localhost:3000.
 
-To run the project locally, use the following commands:
+```bash
+npm run lint     # ESLint
+npm run build    # production build
+npm start        # serve the production build
+```
 
-* **Start the development server:**
-    ```bash
-    npm intall
-    # install all the necessary packages required
-    ```
-* **Build for production:**
-    ```bash
-    npm run dev
-    # opens http://localhost:5173/ (or similar port) with Hot Module Replacement (HMR)
-    ```
+Note: don't run `npm run build` while `npm run dev` is running — they share
+`.next` and the dev server will break until restarted.
 
-## Customization Guide
+## Environment variables
 
-### 1. Update Content
-All textual content (About, Experience, Projects) can be updated in the respective JSX files under `src/components/PortfolioLayout/`.
+Copy `.env.example` to `.env.local`. Every variable is optional; the site
+degrades gracefully without them.
 
-### 2. Assets (Image & Resume)
+| Variable | Purpose | Without it |
+| :--- | :--- | :--- |
+| `GROQ_API_KEY` | Primary provider for `/api/ask` ([console.groq.com/keys](https://console.groq.com/keys)) | Falls through to Gemini |
+| `GEMINI_API_KEY` | Fallback provider ([aistudio.google.com/apikey](https://aistudio.google.com/apikey)) | Groq only |
+| `GROQ_MODEL` | Override (default `openai/gpt-oss-120b`) | Uses the default |
+| `GEMINI_MODEL` | Override (default `gemini-3.6-flash`) | Uses the default |
+| `GITHUB_TOKEN` | Raises the GitHub API rate limit | Unauthenticated requests; section hides on failure |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata and sitemap | Falls back to the Vercel URL |
 
-* **Profile Photo:** To use your own profile photo, replace the placeholder image (e.g., `profile_photo.jpg`) in the **`src/assets`** folder, ensuring the file name matches the import in `StaticSide.jsx`.
-* **Resume PDF:** To link your resume, place your PDF file (e.g., `Rishikesh_Patil_Resume.pdf`) directly into the **`public`** directory. The link in `StaticSide.jsx` already references this path (`/Rishikesh_Patil_Resume.pdf`).
+With neither LLM key set, the assistant still runs its retrieval step and returns
+a clear "offline" message instead of failing.
 
-### 3. Styling & Theming
+No key is ever exposed to the browser — the assistant runs entirely in the route
+handler.
 
-The primary theme and responsive breakpoints are defined in:
+## Deploying to Vercel
 
-* `src/styles/PortfolioLayout.css` (Contains all custom variables, layout logic, and media queries for responsiveness).
-
-You can easily adjust colors by modifying the CSS variables in the `:root` block, such as `--color-accent-primary`.
-```css
-:root {
-    /* Primary color for titles and accents */
-    --color-accent-primary: #64ffda; 
-}
+1. Push to GitHub and import the repository in Vercel (framework auto-detected).
+2. Add `GROQ_API_KEY` and `GEMINI_API_KEY` (and optionally `GITHUB_TOKEN`,
+   `NEXT_PUBLIC_SITE_URL`) under Project → Settings → Environment Variables.
+3. Deploy. The GitHub section revalidates hourly; everything else is static.

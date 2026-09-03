@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Two colours only: black and green.
+   The greys are not neutral — they are the black shade carrying a slight green
+   cast, so the whole surface belongs to the same family as the accent. Nothing
+   outside this scale gets a colour.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-bg: #060a08;
+  --color-surface: #0b1210;
+  --color-surface-hover: #111a16;
+  --color-line: #18231e;
+  --color-line-strong: #25342c;
+  --color-fg: #e9f1ec;
+  --color-muted: #8b9a92;
+  --color-subtle: #5d6b64;
+  --color-accent: #3ecf8e;
+  --color-accent-dim: #1d5c41;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo,
+    monospace;
+
+  --text-display: clamp(2.75rem, 8vw, 5.5rem);
+  --text-section: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Sticky header clearance for anchor jumps. */
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-accent) 30%, transparent);
+  color: var(--color-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* --- Texture: a fine grid, barely there, fading out down the page --------- */
+.grid-field {
+  background-image:
+    linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+  opacity: 0.5;
+}
+
+/* --- Monospace metadata labels ------------------------------------------- */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+/* --- Cards ---------------------------------------------------------------- */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+a.card:hover,
+button.card:hover {
+  border-color: var(--color-line-strong);
+  background-color: var(--color-surface-hover);
+}
+
+/* --- Hairline rule -------------------------------------------------------- */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--color-line-strong),
+    var(--color-line) 45%,
+    transparent
+  );
+}
+
+/* --- Prose defaults inside case studies ---------------------------------- */
+.prose-tight p {
+  color: var(--color-muted);
+  line-height: 1.75;
+  max-width: 68ch;
+}
+
+/* --- Section reveal -------------------------------------------------------
+   Visible by default. The hidden state exists only when scripting is on, so a
+   page without JavaScript still shows all of its content.
+--------------------------------------------------------------------------- */
+.reveal {
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js .reveal:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+/* --- Motion ---------------------------------------------------------------
+   Everything that moves is opt-out. One rule, applied globally.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js .reveal:not(.is-visible) {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Scrollbar ------------------------------------------------------------ */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border-radius: 999px;
+    border: 3px solid var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-subtle);
+  }
+}
